@@ -61,3 +61,7 @@ libm = "0.2"
 num_enum = { version = "0.5", default-features = false }
 usb-device = "0.2"
 usbd-midi = { git = "https://github.com/btrepp/usbd-midi/" }
+
+[patch.crates-io]
+cortex-m = { path = "../cortex-m/cortex-m" }
+cortex-m-rt = { path = "../cortex-m/cortex-m-rt" }

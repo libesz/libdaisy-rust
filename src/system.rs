@@ -43,7 +43,7 @@ pub struct System {
     pub adc1: adc::Adc<stm32::ADC1, adc::Disabled>,
     pub adc2: adc::Adc<stm32::ADC2, adc::Disabled>,
     pub sdram: &'static mut [f32],
-    pub flash: crate::flash::Flash,
+    //pub flash: crate::flash::Flash,
     pub delay: Delay,
 }
 
@@ -63,9 +63,8 @@ pub struct SystemResources<'a> {
     pub i2c2: stm32::I2C2,
     pub i2c2_rec: rcc::rec::I2c2,
     pub cpuid: &'a mut cortex_m::peripheral::CPUID,
-    pub qspi: stm32::QUADSPI,
-    pub qspi_rec: rcc::rec::Qspi,
-
+    // pub qspi: stm32::QUADSPI,
+    // pub qspi_rec: rcc::rec::Qspi,
     pub sai1: stm32::SAI1,
     pub sai1_rec: rcc::rec::Sai1,
 
@@ -86,10 +85,8 @@ pub struct SystemResources<'a> {
 
     pub gpiof: stm32::GPIOF,
     pub gpiof_rec: rcc::rec::Gpiof,
-
     pub gpiog: stm32::GPIOG,
     pub gpiog_rec: rcc::rec::Gpiog,
-
     pub gpioh: stm32::GPIOH,
     pub gpioh_rec: rcc::rec::Gpioh,
 
@@ -103,7 +100,8 @@ pub struct SystemResources<'a> {
 #[macro_export]
 macro_rules! system_init {
     ($core:ident, $device:ident, $ccdr:ident) => {{
-        // let ccdr = libdaisy::system::System::init_clocks($device.PWR, $device.RCC, &$device.SYSCFG);
+        // let ccdr = libdaisy::system::System::init_clocks($device.PWR, $device.RCC,
+        // &$device.SYSCFG);
 
         let resources = libdaisy::system::SystemResources {
             clocks: &$ccdr.clocks,
@@ -120,8 +118,8 @@ macro_rules! system_init {
             i2c2: $device.I2C2,
             i2c2_rec: $ccdr.peripheral.I2C2,
             cpuid: &mut $core.CPUID,
-            qspi: $device.QUADSPI,
-            qspi_rec: $ccdr.peripheral.QSPI,
+            // qspi: $device.QUADSPI,
+            // qspi_rec: $ccdr.peripheral.QSPI,
             sai1: $device.SAI1,
             sai1_rec: $ccdr.peripheral.SAI1,
             gpioa: $device.GPIOA,
@@ -252,8 +250,8 @@ impl System {
         let gpioc = resources.gpioc.split(resources.gpioc_rec);
         let gpiod = resources.gpiod.split(resources.gpiod_rec);
         let gpioe = resources.gpioe.split(resources.gpioe_rec);
-        let gpiof = resources.gpiof.split(resources.gpiof_rec);
-        let gpiog = resources.gpiog.split(resources.gpiog_rec);
+        let gpiof = resources.gpiof.split_without_reset(resources.gpiof_rec);
+        let gpiog = resources.gpiog.split_without_reset(resources.gpiog_rec);
         let gpioh = resources.gpioh.split(resources.gpioh_rec);
         let gpioi = resources.gpioi.split(resources.gpioi_rec);
 
@@ -400,17 +398,17 @@ impl System {
         info!("System init done!");
 
         //setup flash
-        let flash = crate::flash::Flash::new(
-            resources.qspi,
-            resources.qspi_rec,
-            resources.clocks,
-            gpiof.pf6,
-            gpiof.pf7,
-            gpiof.pf8,
-            gpiof.pf9,
-            gpiof.pf10,
-            gpiog.pg6,
-        );
+        // let flash = crate::flash::Flash::new(
+        //     resources.qspi,
+        //     resources.qspi_rec,
+        //     resources.clocks,
+        //     gpiof.pf6,
+        //     gpiof.pf7,
+        //     gpiof.pf8,
+        //     gpiof.pf9,
+        //     gpiof.pf10,
+        //     gpiog.pg6,
+        // );
 
         System {
             gpio,
@@ -418,7 +416,7 @@ impl System {
             adc1,
             adc2,
             sdram,
-            flash,
+            //flash,
             delay,
         }
     }
